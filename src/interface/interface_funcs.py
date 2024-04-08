@@ -2,28 +2,25 @@ from pathlib import Path
 
 acceptable_list = ['jpg', 'jpeg']
 
-def make_linux_friendly(input_path):
-    path = Path(input_path)
-    linux_path = str(path.absolute()).replace("\\","/")
+def check_path(input_path: str, extension: str) -> str:
+    """
+    Checks that path exists and is correct extension
 
-    msg = (f"File was not found:\n{linux_path}")
+    Args:
+        input_path: (string) the path to be validated
+        extension: (string) the expected extension
+    """
+    path = Path(input_path)
+
+    msg = (f"File was not found: {input_path}")
     if not path.is_file():
         raise FileNotFoundError(msg)
 
-    if path.suffix.lower() == "pdf":
-        msg = (f"File extenstion is not pdf:\n{linux_path}")
+    if path.suffix.lower() != extension.lower():
+        msg = (f"File extenstion is not pdf: {input_path}")
         raise WrongFileExtension(msg)
 
-    return linux_path
-
-
-def pathlib_path(input_path):
-    msg = (f"File was not found:\n{input_path}")
-    path = Path(input_path)
-    if not path.is_file():
-        raise FileNotFoundError(msg)
     return input_path
-
 
 class WrongFileExtension(Exception):
     """"Custom exception"""
